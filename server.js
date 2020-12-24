@@ -40,16 +40,16 @@ const server = app.listen(PORT, () =>
 	console.log(`Server is running at at ${PORT}`),
 );
 
-const io = require("socket.io")(server);
+// const io = require("socket.io")(server);
 
-io.use((socket, next) => {
-	next();
-});
+// io.use((socket, next) => {
+// 	next();
+// });
 
-io.on("connection", (socket) => {
-	console.log("new user connected");
+// io.on("connection", (socket) => {
+// 	console.log("new user connected");
 
-	socket.on("disconnect", () => {
-		console.log("user left");
-	});
-});
+// 	socket.on("disconnect", () => {
+// 		console.log("user left");
+// 	});
+// });
