@@ -107,7 +107,7 @@ exports.logout = (req, res) => {
 
 //Based on the token user_id (passed value in the login) is stored in req.auth
 exports.isSignedIn = expressJWT({
-	secret: "secretCode",
+	secret: process.env.PRIVATE_KEY,
 	algorithms: ["HS256"],
 	userProperty: "auth",
 });

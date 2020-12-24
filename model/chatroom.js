@@ -1,5 +1,14 @@
 const mongoose = require("mongoose");
 
+const users = new mongoose.Schema({
+	user: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "User",
+	},
+});
+
+const usersInChatSchema = mongoose.model("UsersInChatSchemna", users);
+
 const chatRoomSchema = new mongoose.Schema(
 	{
 		roomName: {
@@ -19,8 +28,14 @@ const chatRoomSchema = new mongoose.Schema(
 			data: Buffer,
 			contentType: String,
 		},
+		users: [users],
 	},
 	{timestamps: true},
 );
 
-module.exports = mongoose.model("ChatRoom", chatRoomSchema);
+const chatRoom = mongoose.model("ChatRoom", chatRoomSchema);
+
+module.exports = {
+	chatRoom,
+	usersInChatSchema,
+};

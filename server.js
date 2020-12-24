@@ -10,6 +10,7 @@ const app = express();
 //Import customRoutes and Middleware
 const authRoute = require("./router/auth");
 const userRoute = require("./router/user");
+const chatRoomRoute = require("./router/chatroom");
 
 //Database connection
 mongoose
@@ -35,6 +36,7 @@ app.get("/", (req, res) => {
 
 app.use("/api", authRoute);
 app.use("/api", userRoute);
+app.use("/api", chatRoomRoute);
 
 const server = app.listen(PORT, () =>
 	console.log(`Server is running at at ${PORT}`),

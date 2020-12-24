@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.param("userId", getUserById);
 
-router.get(
+router.post(
 	"/create/chatRoom/:userId",
 	isSignedIn,
 	isAuthenticated,

@@ -1,9 +1,10 @@
-const Chatroom = require("../model/chatroom");
+const ChatRoom = require("../model/chatroom");
 
 // #TODO => UPLOAD PHOTOS OPTION
 //Creating new chat Rooms.
 exports.createNewChatRoom = (req, res) => {
-	let newChatRoom = new chatRoom(req.body);
+	req.body.admin = req.user._id;
+	let newChatRoom = new ChatRoom(req.body);
 	newChatRoom
 		.save()
 		.then(() => {
@@ -68,3 +69,9 @@ exports.updateChatRoom = (req, res) => {
 		},
 	);
 };
+
+
+//Getting all chatRooms by userId 
+exports.allChatRoom = (req,res) => {
+	
+}
