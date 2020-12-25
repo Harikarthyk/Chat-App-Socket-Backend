@@ -83,3 +83,26 @@ exports.allChatRoom = (req, res) => {
 		});
 	});
 };
+
+exports.setChatRoomId = (req, res, next, id) => {
+	ChatRoom.findById(id).exec((error, result) => {
+		if (error) {
+			return res.status(400).json({
+				error: "Error in find the Discord",
+			});
+		}
+		req.chatRoom = result;
+		next();
+	});
+};
+
+exports.getChatByRoomId = (req, res) => {
+	if (!req.chatRoom) {
+		return res.status(400).json({
+			error: "Error in finding the Discord",
+		});
+	}
+	return res.status(200).json({
+		room: req.chatRoom,
+	});
+};

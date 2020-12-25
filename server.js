@@ -57,14 +57,15 @@ io.use((socket, next) => {
 io.on("connection", (socket) => {
 	console.log("Connected user : ", socket.userId);
 
-	socket.on("joinRoom", (data) => {
+	socket.on("join_room", (data) => {
+		console.log(data, " ---  ");
 		socket.join(data);
-		console.log("User Joined Room: " + data);
+		console.log("User Joined Room: " + socket.userId + data);
 	});
 
 	socket.on("send_message", (data) => {
-		console.log(data);
-		socket.to(data.room).emit("receive_message", data.content);
+		console.log(data, "  - ");
+		socket.broadcast.to(data.chatroom).emit("receive_message", data.content);
 	});
 
 	socket.on("disconnect", () => {
