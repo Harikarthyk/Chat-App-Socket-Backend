@@ -1,16 +1,17 @@
 const mongoose = require("mongoose");
 
-const users = new mongoose.Schema({
+const allUsersSchema = new mongoose.Schema({
 	user: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "User",
 	},
 });
 
-const usersInChatSchema = mongoose.model("UsersInChatSchemna", users);
+const usersInChatSchema = mongoose.model("usersInChatSchema", allUsersSchema);
 
 const chatRoomSchema = new mongoose.Schema(
 	{
+		allUsers: [allUsersSchema],
 		roomName: {
 			type: String,
 			required: true,
@@ -28,14 +29,13 @@ const chatRoomSchema = new mongoose.Schema(
 			data: Buffer,
 			contentType: String,
 		},
-		users: [users],
 	},
 	{timestamps: true},
 );
 
-const chatRoom = mongoose.model("ChatRoom", chatRoomSchema);
+const ChatRoom = mongoose.model("ChatRoom", chatRoomSchema);
 
 module.exports = {
-	chatRoom,
+	ChatRoom,
 	usersInChatSchema,
 };

@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+
 const cookieParser = require("cookie-parser");
 
 const app = express();
@@ -42,16 +43,31 @@ const server = app.listen(PORT, () =>
 	console.log(`Server is running at at ${PORT}`),
 );
 
-// const io = require("socket.io")(server);
+const socket = require("socket.io");
 
-// io.use((socket, next) => {
-// 	next();
-// });
+const io = socket(server, {
+	cors: true,
+	origins: ["http://127.0.0.1:5347"],
+});
 
-// io.on("connection", (socket) => {
-// 	console.log("new user connected");
+io.use((socket, next) => {
+	socket.userId = socket.handshake.query.userId;
+	next();
+});
+io.on("connection", (socket) => {
+	console.log("Connected user : ", socket.userId);
 
-// 	socket.on("disconnect", () => {
-// 		console.log("user left");
-// 	});
-// });
+	socket.on("joinRoom", (data) => {
+		socket.join(data);
+		console.log("User Joined Room: " + data);
+	});
+
+	socket.on("send_message", (data) => {
+		console.log(data);
+		socket.to(data.room).emit("receive_message", data.content);
+	});
+
+	socket.on("disconnect", () => {
+		console.log("USER DISCONNECTED");
+	});
+});

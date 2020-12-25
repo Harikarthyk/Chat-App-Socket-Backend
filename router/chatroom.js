@@ -1,6 +1,6 @@
 const express = require("express");
 const {isSignedIn, isAuthenticated} = require("../controller/auth");
-const {createNewChatRoom} = require("../controller/chatroom");
+const {createNewChatRoom, allChatRoom} = require("../controller/chatroom");
 const {getUserById} = require("../controller/user");
 const router = express.Router();
 
@@ -12,5 +12,7 @@ router.post(
 	isAuthenticated,
 	createNewChatRoom,
 );
+
+router.get("/all/rooms/:userId", isSignedIn, isAuthenticated, allChatRoom);
 
 module.exports = router;

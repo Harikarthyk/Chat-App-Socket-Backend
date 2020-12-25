@@ -1,4 +1,4 @@
-const ChatRoom = require("../model/chatroom");
+const {ChatRoom} = require("../model/chatroom");
 
 // #TODO => UPLOAD PHOTOS OPTION
 //Creating new chat Rooms.
@@ -70,8 +70,16 @@ exports.updateChatRoom = (req, res) => {
 	);
 };
 
-
-//Getting all chatRooms by userId 
-exports.allChatRoom = (req,res) => {
-	
-}
+//Getting all chatRooms by userId
+exports.allChatRoom = (req, res) => {
+	ChatRoom.find({admin: req.user._id}, (error, result) => {
+		if (error) {
+			return res.status(400).json({
+				error: "Error in finding rooms",
+			});
+		}
+		return res.status(200).json({
+			rooms: result,
+		});
+	});
+};

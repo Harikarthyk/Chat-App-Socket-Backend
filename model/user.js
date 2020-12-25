@@ -27,6 +27,7 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			default: "I am Available",
 		},
+ 
 	},
 	{timestamps: true},
 );
