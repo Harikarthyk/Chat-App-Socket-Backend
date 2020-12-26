@@ -7,9 +7,10 @@ exports.createNewChatRoom = (req, res) => {
 	let newChatRoom = new ChatRoom(req.body);
 	newChatRoom
 		.save()
-		.then(() => {
+		.then((result) => {
 			res.status(200).json({
 				message: "ChatRoom created successfully",
+				result: result,
 			});
 		})
 		.catch((error) =>

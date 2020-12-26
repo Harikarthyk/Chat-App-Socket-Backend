@@ -52,15 +52,7 @@ const io = socket(server, {
 
 io.use((socket, next) => {
 	socket.userId = socket.handshake.query.userId;
-	var color = "";
-	while (color !== "#f9f9f9") {
-		color = "#";
-		var letters = "0123456789ABCDEF";
-		for (var i = 0; i < 6; i++) {
-			color += letters[Math.floor(Math.random() * 16)];
-		}
-	}
-	socket.color = color;
+
 	next();
 });
 io.on("connection", (socket) => {
@@ -72,9 +64,10 @@ io.on("connection", (socket) => {
 	});
 
 	socket.on("send_message", (data) => {
-		data.content.color = socket.color;
 		socket.broadcast.to(data.chatroom).emit("receive_message", data.content);
 	});
+
+	console.log(socket.adapter.rooms);
 
 	socket.on("disconnect", () => {
 		console.log("USER DISCONNECTED");
