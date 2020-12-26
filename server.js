@@ -52,19 +52,27 @@ const io = socket(server, {
 
 io.use((socket, next) => {
 	socket.userId = socket.handshake.query.userId;
+	var color = "";
+	while (color !== "#f9f9f9") {
+		color = "#";
+		var letters = "0123456789ABCDEF";
+		for (var i = 0; i < 6; i++) {
+			color += letters[Math.floor(Math.random() * 16)];
+		}
+	}
+	socket.color = color;
 	next();
 });
 io.on("connection", (socket) => {
 	console.log("Connected user : ", socket.userId);
 
 	socket.on("join_room", (data) => {
-		console.log(data, " ---  ");
 		socket.join(data);
-		console.log("User Joined Room: " + socket.userId + data);
+		console.log("User Joined Room: " + data);
 	});
 
 	socket.on("send_message", (data) => {
-		console.log(data, "  - ");
+		data.content.color = socket.color;
 		socket.broadcast.to(data.chatroom).emit("receive_message", data.content);
 	});
 
