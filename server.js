@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 
 const app = express();
+let arr = new Map();
 
 //Import customRoutes and Middleware
 const authRoute = require("./router/auth");
@@ -52,22 +53,36 @@ const io = socket(server, {
 
 io.use((socket, next) => {
 	socket.userId = socket.handshake.query.userId;
+	socket.userName = socket.handshake.query.userName;
 
+	socket.color = socket.handshake.query.color;
 	next();
 });
 io.on("connection", (socket) => {
 	console.log("Connected user : ", socket.userId);
-
 	socket.on("join_room", (data) => {
+		if (arr.size == 0 || !arr.has(data)) {
+			socket.emit("error_m	essage", {error: "No Discord found"});
+			return;
+		}
 		socket.join(data);
+		socket.emit("error_message", {data: arr.get(data)});
+		socket.broadcast
+			.to(data)
+			.emit("in_user", `new user ${socket.userName} Joinned 👋🏼👋🏼`);
 		console.log("User Joined Room: " + data);
 	});
 
-	socket.on("send_message", (data) => {
-		socket.broadcast.to(data.chatroom).emit("receive_message", data.content);
+	socket.on("create_room", (data) => {
+		socket.join(data.roomId);
+		arr.set(data.roomId, data.roomName);
+		console.log("New room created " + data);
 	});
 
-	console.log(socket.adapter.rooms);
+	socket.on("send_message", (data) => {
+		data.content.color = socket.color;
+		socket.broadcast.to(data.chatroom).emit("receive_message", data.content);
+	});
 
 	socket.on("disconnect", () => {
 		console.log("USER DISCONNECTED");
